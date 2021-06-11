@@ -9,6 +9,17 @@ export interface Options {
     mockMode?: boolean;
 }
 
+interface Pagination {
+    ending_before: string | null;
+    starting_after: string | null;
+    previous_ending_before: string | null;
+    next_starting_after: string | null;
+    limit: number;
+    order: "desc" | "asc";
+    previous_uri: string | null;
+    next_uri: string | null;
+}
+
 export type AccountType = "wallet" | "fiat" | "vault";
 
 export interface Account {
@@ -37,4 +48,14 @@ export interface Account {
     resource_path: string;
     allow_deposits: boolean;
     allow_withdrawals: boolean;
+}
+
+export interface RawGetAccountsResponse {
+    pagination: Pagination;
+    data: Account[];
+}
+
+export interface GetAccountsResponse {
+    nextPage: string | null;
+    accounts: Account[];
 }

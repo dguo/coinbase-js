@@ -7,7 +7,7 @@ const {Coinbase} = require("./build");
     const coinbase = new Coinbase({
         apiKey: process.env.API_KEY,
         apiSecret: process.env.API_SECRET,
-        apiVersion: process.env.API_VERSION,
+        apiVersion: process.env.API_VERSION
     });
 
     try {

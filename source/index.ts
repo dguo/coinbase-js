@@ -3,7 +3,8 @@ import crypto from "crypto";
 import axios, {AxiosInstance} from "axios";
 import rax from "retry-axios";
 
-import {Account, Options} from "./types";
+import {GetAccountsResponse, Options, RawGetAccountsResponse} from "./types";
+import {MOCK_ACCOUNT} from "./mocks";
 
 export {Account, AccountType} from "./types";
 
@@ -17,10 +18,10 @@ export class Coinbase {
     constructor(options?: Options) {
         this.#axiosInstance = axios.create({
             baseURL: "https://api.coinbase.com",
-            ...options?.axiosConfig,
+            ...options?.axiosConfig
         });
         this.#axiosInstance.defaults.raxConfig = {
-            instance: this.#axiosInstance,
+            instance: this.#axiosInstance
         };
         rax.attach(this.#axiosInstance);
 
@@ -56,17 +57,24 @@ export class Coinbase {
 
         return {
             timestamp: secondsSinceEpoch,
-            signature,
+            signature
         };
     }
 
-    async getAccounts(options?: Options): Promise<Account[]> {
+    async getAccounts(options?: Options): Promise<GetAccountsResponse> {
         const method = "GET";
         const path = "/v2/accounts";
         const {signature, timestamp} = this.#getAuthenticationHeaders(
             method,
             path
         );
+
+        if (this.#useMocks(options)) {
+            return {
+                accounts: [MOCK_ACCOUNT],
+                nextPage: null
+            };
+        }
 
         const response = await this.#axiosInstance.request({
             method,
@@ -76,10 +84,16 @@ export class Coinbase {
                 "CB-ACCESS-SIGN": signature,
                 "CB-ACCESS-TIMESTAMP": timestamp,
                 "CB-VERSION": this.#apiVersion,
-                ...options?.axiosConfig?.headers,
+                ...options?.axiosConfig?.headers
             },
-            ...options?.axiosConfig,
+            ...options?.axiosConfig
         });
-        return response.data;
+
+        const data: RawGetAccountsResponse = response.data;
+
+        return {
+            accounts: data.data,
+            nextPage: data.pagination.next_uri
+        };
     }
 }
