@@ -11,7 +11,9 @@ const {Coinbase} = require("./build");
     });
 
     try {
-        const response = await coinbase.getAccounts();
+        // const response = await coinbase.getAccounts();
+
+        const response = await coinbase.getExchangeRates();
 
         console.dir(response, {depth: null});
     } catch (error) {

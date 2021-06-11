@@ -3,8 +3,14 @@ import crypto from "crypto";
 import axios, {AxiosInstance} from "axios";
 import rax from "retry-axios";
 
-import {GetAccountsResponse, Options, RawGetAccountsResponse} from "./types";
-import {MOCK_ACCOUNT} from "./mocks";
+import {
+    GetAccountsResponse,
+    GetExchangeRatesOptions,
+    GetExchangeRatesResponse,
+    Options,
+    RawGetAccountsResponse
+} from "./types";
+import {MOCK_ACCOUNT, MOCK_EXCHANGE_RATES} from "./mocks";
 
 export {Account, AccountType} from "./types";
 
@@ -95,5 +101,18 @@ export class Coinbase {
             accounts: data.data,
             nextPage: data.pagination.next_uri
         };
+    }
+
+    async getExchangeRates(
+        options?: GetExchangeRatesOptions
+    ): Promise<GetExchangeRatesResponse> {
+        if (this.#useMocks(options)) {
+            return MOCK_EXCHANGE_RATES;
+        }
+
+        const response = await this.#axiosInstance.get(`/v2/exchange-rates`, {
+            params: {currency: options?.currency}
+        });
+        return response.data.data;
     }
 }

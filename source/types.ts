@@ -59,3 +59,12 @@ export interface GetAccountsResponse {
     nextPage: string | null;
     accounts: Account[];
 }
+
+export interface GetExchangeRatesOptions extends Options {
+    currency?: string;
+}
+
+export interface GetExchangeRatesResponse {
+    currency: string;
+    rates: Record<string, string>;
+}
