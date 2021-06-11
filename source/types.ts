@@ -60,6 +60,54 @@ export interface GetAccountsResponse {
     accounts: Account[];
 }
 
+export interface SendMoneyOptions extends Options {
+    accountId: string;
+    to: string;
+    amount: string;
+    currency: string;
+    description?: string;
+    skipNotifications?: boolean;
+    fee?: string;
+    idem?: string;
+    toFinancialInstitution?: boolean;
+    financialInstitutionWebsite?: string;
+}
+
+export interface Transaction {
+    id: string;
+    type: string;
+    status: string;
+    amount: {amount: string; currency: string};
+    native_amount: {amount: string; currency: string};
+    description: string;
+    created_at: string;
+    updated_at: string;
+    resource: "transaction";
+    resource_path: string;
+    details: {
+        title?: string;
+        subtitle?: string;
+        header?: string;
+        health?: string;
+        [key: string]: any;
+    };
+    network?: {status: string; status_description: string | null};
+    to?: {
+        resource?: string;
+        email?: string;
+        name?: string;
+        avatar_url?: string;
+        currency?: string;
+        [key: string]: any;
+    };
+    from?: any;
+    application?: any;
+    instant_exchange?: boolean;
+    off_chain_status?: string;
+    idem?: string;
+    hide_native_amount?: boolean;
+}
+
 export interface GetExchangeRatesOptions extends Options {
     currency?: string;
 }

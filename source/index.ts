@@ -2,13 +2,16 @@ import crypto from "crypto";
 
 import axios, {AxiosInstance} from "axios";
 import rax from "retry-axios";
+import {v4 as uuidV4} from "uuid";
 
 import {
     GetAccountsResponse,
     GetExchangeRatesOptions,
     GetExchangeRatesResponse,
     Options,
-    RawGetAccountsResponse
+    RawGetAccountsResponse,
+    SendMoneyOptions,
+    Transaction
 } from "./types";
 import {MOCK_ACCOUNT, MOCK_EXCHANGE_RATES} from "./mocks";
 
@@ -101,6 +104,43 @@ export class Coinbase {
             accounts: data.data,
             nextPage: data.pagination.next_uri
         };
+    }
+
+    async sendMoney(options: SendMoneyOptions): Promise<Transaction> {
+        const method = "POST";
+        const path = `/v2/accounts/${options.accountId}/transactions`;
+        const body = {
+            type: "send",
+            to: options.to,
+            amount: options.amount,
+            currency: options.currency,
+            description: options.description,
+            skip_notifications: options.skipNotifications,
+            fee: options.fee,
+            idem: uuidV4(),
+            to_financial_institution: options.toFinancialInstitution,
+            financial_institution_website: options.financialInstitutionWebsite
+        };
+        const {signature, timestamp} = this.#getAuthenticationHeaders(
+            "POST",
+            path,
+            JSON.stringify(body)
+        );
+
+        const response = await this.#axiosInstance.request({
+            method,
+            url: path,
+            data: body,
+            headers: {
+                "CB-ACCESS-KEY": this.#apiKey,
+                "CB-ACCESS-SIGN": signature,
+                "CB-ACCESS-TIMESTAMP": timestamp,
+                "CB-VERSION": this.#apiVersion,
+                ...options.axiosConfig?.headers
+            }
+        });
+
+        return response.data.data;
     }
 
     async getExchangeRates(
