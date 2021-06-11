@@ -1,0 +1,15 @@
+*.log
+.env
+
+# Vim
+*.swo
+*.swp
+
+# Node
+node_modules/
+
+# TypeScript
+build/
+
+# tests
+coverage/
