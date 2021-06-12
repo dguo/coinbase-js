@@ -141,6 +141,11 @@ export class Coinbase {
             headers: {
                 ...headers,
                 ...options.axiosConfig?.headers
+            },
+            raxConfig: {
+                // Retrying is okay because we always send an idempotency token
+                httpMethodsToRetry: [method],
+                ...options.axiosConfig?.raxConfig
             }
         });
 

@@ -84,7 +84,6 @@ export interface SendMoneyOptions extends Options {
     description?: string;
     skipNotifications?: boolean;
     fee?: string;
-    idem?: string;
     toFinancialInstitution?: boolean;
     financialInstitutionWebsite?: string;
 }
