@@ -15,7 +15,7 @@ import {
     SendMoneyOptions,
     Transaction
 } from "./types";
-import {MOCK_ACCOUNT, MOCK_EXCHANGE_RATES} from "./mocks";
+import {MOCK_ACCOUNT, MOCK_EXCHANGE_RATES, MOCK_TRANSACTION} from "./mocks";
 
 export {Account, AccountType} from "./types";
 
@@ -132,6 +132,10 @@ export class Coinbase {
             path,
             body: JSON.stringify(body)
         });
+
+        if (this.#useMocks(options)) {
+            return MOCK_TRANSACTION;
+        }
 
         const response = await this.#axiosInstance.request({
             method,

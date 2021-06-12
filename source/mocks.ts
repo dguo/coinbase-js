@@ -1,4 +1,4 @@
-import {Account, GetExchangeRatesResponse} from "./types";
+import {Account, GetExchangeRatesResponse, Transaction} from "./types";
 
 export const MOCK_ACCOUNT: Account = {
     id: "031533d9-4990-4534-ae26-4da5daead89a",
@@ -24,6 +24,38 @@ export const MOCK_ACCOUNT: Account = {
     resource_path: "/v2/accounts/031533d9-4990-4534-ae26-4da5daead89a",
     allow_deposits: true,
     allow_withdrawals: true
+};
+
+export const MOCK_TRANSACTION: Transaction = {
+    id: "568fe7aa-5633-4efe-9bc2-ca34edaa71c6",
+    type: "send",
+    status: "completed",
+    amount: {amount: "-0.00000100", currency: "BTC"},
+    native_amount: {amount: "-0.03", currency: "USD"},
+    description: "Test transfer",
+    created_at: "2021-06-12T13:35:28Z",
+    updated_at: "2021-06-12T13:35:28Z",
+    resource: "transaction",
+    resource_path:
+        "/v2/accounts/031533d9-4990-4534-ae26-4da5daead89a/transactions/568fe7aa-5633-4efe-9bc2-ca34edaa71c6",
+    instant_exchange: false,
+    off_chain_status: "completed",
+    network: {status: "off_blockchain", status_description: null},
+    to: {
+        resource: "user",
+        email: "joe@example.com",
+        name: "joe@example.com",
+        avatar_url: "https://images.coinbase.com/avatar?s=128",
+        currency: "BTC"
+    },
+    idem: "5063d951-48e3-4dd1-b5b2-e351f44bb38d",
+    details: {
+        title: "Sent Bitcoin",
+        subtitle: "To joe@example.com",
+        header: "Sent 0.000001 BTC ($0.03)",
+        health: "positive"
+    },
+    hide_native_amount: false
 };
 
 export const MOCK_EXCHANGE_RATES: GetExchangeRatesResponse = {

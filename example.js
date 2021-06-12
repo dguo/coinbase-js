@@ -13,16 +13,17 @@ const {Coinbase} = require("./build");
     });
 
     try {
-        const response = await coinbase.getAccounts();
+        // const response = await coinbase.getAccounts();
 
-        // const response = await coinbase.getExchangeRates();
+        const response = await coinbase.getExchangeRates();
 
         // const response = await coinbase.sendMoney({
         //     accountId: process.env.SEND_MONEY_FROM_ACCOUNT_ID,
         //     to: process.env.SEND_MONEY_TO,
         //     amount: "0.03",
         //     currency: "USD",
-        //     description: "Test transfer"
+        //     description: "Test transfer",
+        //     skipNotifications: true
         // });
 
         console.dir(response, {depth: null});
