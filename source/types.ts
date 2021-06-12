@@ -1,11 +1,27 @@
 import {AxiosRequestConfig} from "axios";
 import {RetryConfig} from "retry-axios";
 
-export interface Options {
-    axiosConfig?: AxiosRequestConfig & {raxConfig?: RetryConfig};
+interface AuthenticationOptions {
     apiKey?: string;
     apiSecret?: string;
     apiVersion?: string;
+}
+
+export interface GetRequestHeadersOptions extends AuthenticationOptions {
+    method: string;
+    path: string;
+    body?: string;
+}
+
+export interface RequestHeaders {
+    "CB-ACCESS-KEY": string;
+    "CB-ACCESS-SIGN": string;
+    "CB-ACCESS-TIMESTAMP": number;
+    "CB-VERSION"?: string;
+}
+
+export interface Options extends AuthenticationOptions {
+    axiosConfig?: AxiosRequestConfig & {raxConfig?: RetryConfig};
     mockMode?: boolean;
 }
 

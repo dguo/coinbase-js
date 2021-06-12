@@ -13,9 +13,9 @@ const {Coinbase} = require("./build");
     });
 
     try {
-        // const response = await coinbase.getAccounts();
+        const response = await coinbase.getAccounts();
 
-        const response = await coinbase.getExchangeRates();
+        // const response = await coinbase.getExchangeRates();
 
         // const response = await coinbase.sendMoney({
         //     accountId: process.env.SEND_MONEY_FROM_ACCOUNT_ID,

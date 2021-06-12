@@ -8,8 +8,10 @@ import {
     GetAccountsResponse,
     GetExchangeRatesOptions,
     GetExchangeRatesResponse,
+    GetRequestHeadersOptions,
     Options,
     RawGetAccountsResponse,
+    RequestHeaders,
     SendMoneyOptions,
     Transaction
 } from "./types";
@@ -48,35 +50,42 @@ export class Coinbase {
         return this.#mockMode;
     }
 
-    #getAuthenticationHeaders(
-        method: string,
-        path: string,
-        body?: string
-    ): {timestamp: number; signature: string} {
+    #getRequestHeaders(options: GetRequestHeadersOptions): RequestHeaders {
+        const apiKey = options.apiKey ?? this.#apiKey;
+        if (!apiKey) {
+            throw new Error("Missing Coinbase API key");
+        }
+        const apiSecret = options.apiSecret ?? this.#apiSecret;
+        if (!apiSecret) {
+            throw new Error("Missing Coinbase API secret");
+        }
+
         const secondsSinceEpoch = Math.floor(new Date().getTime() / 1000);
 
-        let data = secondsSinceEpoch + method + path;
-        if (body) {
-            data += body;
+        let data = secondsSinceEpoch + options.method + options.path;
+        if (options.body) {
+            data += options.body;
         }
         const signature = crypto
-            .createHmac("sha256", this.#apiSecret as string)
+            .createHmac("sha256", apiSecret)
             .update(data)
             .digest("hex");
 
         return {
-            timestamp: secondsSinceEpoch,
-            signature
+            "CB-ACCESS-KEY": apiKey,
+            "CB-ACCESS-SIGN": signature,
+            "CB-ACCESS-TIMESTAMP": secondsSinceEpoch,
+            "CB-VERSION": options.apiVersion ?? this.#apiVersion ?? undefined
         };
     }
 
     async getAccounts(options?: Options): Promise<GetAccountsResponse> {
         const method = "GET";
         const path = "/v2/accounts";
-        const {signature, timestamp} = this.#getAuthenticationHeaders(
+        const headers = this.#getRequestHeaders({
             method,
             path
-        );
+        });
 
         if (this.#useMocks(options)) {
             return {
@@ -90,10 +99,7 @@ export class Coinbase {
             url: path,
             ...options?.axiosConfig,
             headers: {
-                "CB-ACCESS-KEY": this.#apiKey,
-                "CB-ACCESS-SIGN": signature,
-                "CB-ACCESS-TIMESTAMP": timestamp,
-                "CB-VERSION": this.#apiVersion,
+                ...headers,
                 ...options?.axiosConfig?.headers
             }
         });
@@ -121,11 +127,11 @@ export class Coinbase {
             to_financial_institution: options.toFinancialInstitution,
             financial_institution_website: options.financialInstitutionWebsite
         };
-        const {signature, timestamp} = this.#getAuthenticationHeaders(
-            "POST",
+        const headers = this.#getRequestHeaders({
+            method,
             path,
-            JSON.stringify(body)
-        );
+            body: JSON.stringify(body)
+        });
 
         const response = await this.#axiosInstance.request({
             method,
@@ -133,10 +139,7 @@ export class Coinbase {
             data: body,
             ...options.axiosConfig,
             headers: {
-                "CB-ACCESS-KEY": this.#apiKey,
-                "CB-ACCESS-SIGN": signature,
-                "CB-ACCESS-TIMESTAMP": timestamp,
-                "CB-VERSION": this.#apiVersion,
+                ...headers,
                 ...options.axiosConfig?.headers
             }
         });
