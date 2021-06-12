@@ -22,7 +22,7 @@ export class Coinbase {
     #apiKey: string | null;
     #apiSecret: string | null;
     #apiVersion: string | null;
-    mockMode: boolean;
+    #mockMode: boolean;
 
     constructor(options?: Options) {
         this.#axiosInstance = axios.create({
@@ -37,7 +37,7 @@ export class Coinbase {
         this.#apiKey = options?.apiKey ?? null;
         this.#apiSecret = options?.apiSecret ?? null;
         this.#apiVersion = options?.apiVersion ?? null;
-        this.mockMode = options?.mockMode ?? false;
+        this.#mockMode = options?.mockMode ?? false;
     }
 
     #useMocks(options?: Options): boolean {
@@ -45,7 +45,7 @@ export class Coinbase {
             return options.mockMode;
         }
 
-        return this.mockMode;
+        return this.#mockMode;
     }
 
     #getAuthenticationHeaders(
