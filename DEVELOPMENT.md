@@ -15,7 +15,6 @@ These notes are reminders to myself about how to do certain things.
 8. Push the tag with `git push --tags`.
 9. The CD GitHub Action should automatically create a new GitHub release.
 10. Update the release's description with the changelog text.
-11. Run `./dev sh` and then `npm login` and `npm publish` within the shell.
-    Don't use `yarn publish` because Yarn collects the one-time password for 2FA
-    before the `prepublishOnly` command runs, so the password expires by the
-    time Yarn sends it to npm.
+11. Run `npm login` and `npm publish`. Don't use `yarn publish` because Yarn
+    collects the one-time password for 2FA before the `prepublishOnly` command
+    runs, so the password expires by the time Yarn sends it to npm.
