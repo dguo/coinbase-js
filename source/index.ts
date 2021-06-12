@@ -88,14 +88,14 @@ export class Coinbase {
         const response = await this.#axiosInstance.request({
             method,
             url: path,
+            ...options?.axiosConfig,
             headers: {
                 "CB-ACCESS-KEY": this.#apiKey,
                 "CB-ACCESS-SIGN": signature,
                 "CB-ACCESS-TIMESTAMP": timestamp,
                 "CB-VERSION": this.#apiVersion,
                 ...options?.axiosConfig?.headers
-            },
-            ...options?.axiosConfig
+            }
         });
 
         const data: RawGetAccountsResponse = response.data;
@@ -131,6 +131,7 @@ export class Coinbase {
             method,
             url: path,
             data: body,
+            ...options.axiosConfig,
             headers: {
                 "CB-ACCESS-KEY": this.#apiKey,
                 "CB-ACCESS-SIGN": signature,
@@ -150,9 +151,16 @@ export class Coinbase {
             return MOCK_EXCHANGE_RATES;
         }
 
-        const response = await this.#axiosInstance.get(`/v2/exchange-rates`, {
-            params: {currency: options?.currency}
+        const response = await this.#axiosInstance.request({
+            method: "GET",
+            url: `/v2/exchange-rates`,
+            ...options?.axiosConfig,
+            params: {
+                currency: options?.currency,
+                ...options?.axiosConfig?.params
+            }
         });
+
         return response.data.data;
     }
 }
