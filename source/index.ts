@@ -1,7 +1,6 @@
 import crypto from "crypto";
 
 import axios, {AxiosInstance} from "axios";
-import rax from "retry-axios";
 import {v4 as uuidV4} from "uuid";
 
 import {
@@ -31,10 +30,6 @@ export class Coinbase {
             baseURL: "https://api.coinbase.com",
             ...options?.axiosConfig
         });
-        this.#axiosInstance.defaults.raxConfig = {
-            instance: this.#axiosInstance
-        };
-        rax.attach(this.#axiosInstance);
 
         this.#apiKey = options?.apiKey ?? null;
         this.#apiSecret = options?.apiSecret ?? null;
@@ -145,11 +140,6 @@ export class Coinbase {
             headers: {
                 ...headers,
                 ...options.axiosConfig?.headers
-            },
-            raxConfig: {
-                // Retrying is okay because we always send an idempotency token
-                httpMethodsToRetry: [method],
-                ...options.axiosConfig?.raxConfig
             }
         });
 

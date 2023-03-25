@@ -1,5 +1,4 @@
 import {AxiosRequestConfig} from "axios";
-import {RetryConfig} from "retry-axios";
 
 interface AuthenticationOptions {
     apiKey?: string;
@@ -21,7 +20,7 @@ export interface RequestHeaders {
 }
 
 export interface Options extends AuthenticationOptions {
-    axiosConfig?: AxiosRequestConfig & {raxConfig?: RetryConfig};
+    axiosConfig?: AxiosRequestConfig;
     mockMode?: boolean;
 }
 
