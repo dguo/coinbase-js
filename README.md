@@ -37,6 +37,7 @@ import {Coinbase} from "coinbase-js";
 const apiToken = "<your token>";
 const apiSecret = "<your secret>";
 const coinbase = new Coinbase({apiToken, apiSecret});
+const response = await coinbase.getExchangeRates();
 ```
 
 ## License
