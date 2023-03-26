@@ -8,9 +8,9 @@
 [![known vulnerabilities](https://snyk.io/test/github/dguo/coinbase-js/badge.svg?targetFile=package.json)](https://snyk.io/test/github/dguo/coinbase-js?targetFile=package.json)
 
 Node.js client for [Coinbase](https://www.coinbase.com/)'s
-[API](https://developers.coinbase.com/). This client covers the regular API. For
-the [Coinbase Pro API](https://developers.coinbase.com/docs/exchange), check out
-[this client](https://bennycode.com/coinbase-pro-node) instead.
+[API](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/welcome). This
+client covers the regular API. For the [Coinbase Pro](https://pro.coinbase.com/)
+API, check out [this client](https://bennycode.com/coinbase-pro-node) instead.
 
 This is a work in progress. Significant changes and documentation are incoming.
 
@@ -27,6 +27,9 @@ yarn add coinbase-js
 ```
 
 ## Usage
+
+You'll need to [generate an API key and
+secret](https://help.coinbase.com/en/cloud/api/coinbase/key-creation).
 
 ```javascript
 import {Coinbase} from "coinbase-js";

@@ -1,6 +1,7 @@
 import crypto from "crypto";
 
-import axios, {AxiosInstance} from "axios";
+import axios, {AxiosError, AxiosInstance} from "axios";
+import axiosRetry from "axios-retry";
 import {v4 as uuidV4} from "uuid";
 
 import {
@@ -30,6 +31,7 @@ export class Coinbase {
             baseURL: "https://api.coinbase.com",
             ...options?.axiosConfig
         });
+        axiosRetry(this.#axiosInstance, {retries: 3});
 
         this.#apiKey = options?.apiKey ?? null;
         this.#apiSecret = options?.apiSecret ?? null;
@@ -140,6 +142,16 @@ export class Coinbase {
             headers: {
                 ...headers,
                 ...options.axiosConfig?.headers
+            },
+            // Retrying is okay because we always send an idempotency token
+            "axios-retry": {
+                retryCondition: (error: AxiosError) => {
+                    return Boolean(
+                        axiosRetry.isNetworkError(error) ||
+                            (error?.status && error.status >= 500)
+                    );
+                },
+                ...options.axiosConfig?.["axios-retry"]
             }
         });
 
