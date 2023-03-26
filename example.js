@@ -20,10 +20,11 @@ const {Coinbase} = require("./build");
         // const response = await coinbase.sendMoney({
         //     accountId: process.env.SEND_MONEY_FROM_ACCOUNT_ID,
         //     to: process.env.SEND_MONEY_TO,
-        //     amount: "0.03",
+        //     amount: "0.21",
         //     currency: "USD",
         //     description: "Test transfer",
-        //     skipNotifications: true
+        //     skipNotifications: true,
+        //     destinationTag: process.env.SEND_MONEY_TO_MEMO
         // });
 
         console.dir(response, {depth: null});

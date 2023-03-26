@@ -85,6 +85,7 @@ export interface SendMoneyOptions extends Options {
     fee?: string;
     toFinancialInstitution?: boolean;
     financialInstitutionWebsite?: string;
+    destinationTag?: string;
 }
 
 export interface Transaction {

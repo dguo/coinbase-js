@@ -122,7 +122,8 @@ export class Coinbase {
             fee: options.fee,
             idem: uuidV4(),
             to_financial_institution: options.toFinancialInstitution,
-            financial_institution_website: options.financialInstitutionWebsite
+            financial_institution_website: options.financialInstitutionWebsite,
+            destination_tag: options.destinationTag
         };
         const headers = this.#getRequestHeaders({
             method,
